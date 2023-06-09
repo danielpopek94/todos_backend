@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 const dbName = 'todo';
-const mongoUrl = 'mongodb://127.0.0.1:27017';
+const mongoUrl = 'mongodb+srv://admin:admin@todoapp.bbycyl2.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(mongoUrl);
 
 app.get('/todos', async (req, res) => {
@@ -45,8 +45,8 @@ app.post('/todos', async (req, res) => {
       "title": title,
       "completed": completed
     });
-    const insertedId = result.insertedId; // Pobierz pierwsze utworzone todo z result.ops
-    const insertedTodo = await db.collection('todos').findOne({ "_id": insertedId }); // Pobierz todo na podstawie identyfikatora
+    const insertedId = result.insertedId;
+    const insertedTodo = await db.collection('todos').findOne({ "_id": insertedId });
 
     res.json(insertedTodo);
   } catch (e) {
