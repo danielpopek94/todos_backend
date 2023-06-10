@@ -1,3 +1,6 @@
+![img](image.png)
+
+
 # Todo App Server
 
 This is a Express.js server for a Todo application. It provides an API to manage todos with basic CRUD operations.
@@ -80,23 +83,9 @@ Example: `DELETE /todos/789`
 
 Feel free to explore the code and customize it according to your requirements.
 
-# Deploying to Vercel
+## Deployment
 
-### Here is a step-by-step guide on how to deploy your application to Vercel based on the provided notes:
-
-1. Run the command `vercel login` to log in to your Vercel account. If you don't have an account yet, you can create one on the [Vercel website](https://vercel.com/).
-
-2. Execute the command `vercel` in your project directory. This will initialize the Vercel project and guide you through the configuration process.
-
-3. During the configuration process, you will be prompted to specify the root directory of your project. Provide the path to the directory where your app.js file or main server file is located.
-
-4. Next, you will be asked to set up your project settings, such as the name of the project and the framework used. Select the appropriate options based on your project.
-
-5. Vercel will then analyze your project and attempt to detect the appropriate framework. If it correctly identifies your project as an Express.js application, it will proceed with the deployment process.
-
-6. Once the deployment process is complete, Vercel will provide you with a deployment URL where your application is accessible online. You can access your deployed application using this URL.
-
-7. Vercel also offers additional features such as environment variables, custom domains, and more. You can further configure your project by visiting the Vercel dashboard or using the Vercel CLI.
+U can use [Render.com](https://render.com/) for deployment.
 
 ## License
 
