@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node src/app.js",
+    "vercel-build": "echo hello"
   },
   "dependencies": {
     "cors": "^2.8.5",
