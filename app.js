@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const { ObjectId } = require('mongodb');
 
 const app = express();
 const port = 3000;
@@ -16,12 +17,13 @@ app.get('/todos', async (req, res) => {
     await client.connect();
 
     const db = client.db(dbName);
-    const todo = await db.collection('todos').find().toArray();
+
+    const todo = await db.collection('todos').find().toArray();//fixed toArray after tests
 
     if (todo) {
       res.json(todo);
     } else {
-      res.status(404).json({ error: 'Task not found' });
+      res.status(404).json({ error: 'Todo not found' });
     }
   } catch (e) {
     console.log('Error, cannot connect to the database:', e);
@@ -57,6 +59,32 @@ app.post('/todos', async (req, res) => {
     console.log('Database connection closed.');
   }
 });
+
+app.delete('/todos', async (req, res) => {
+  try {
+    const id = req.query.id;
+    const objectId = new ObjectId(id);
+    const client = new MongoClient(mongoUrl);
+
+    await client.connect();
+
+    const db = client.db(dbName);
+    const result = await db.collection('todos').deleteOne({ "_id": objectId });
+
+    if (result.deletedCount === 1) {
+      res.json({ message: 'Todo deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Todo not found' });
+    }
+  } catch (e) {
+    console.log('Error, cannot connect to the database:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    await client.close();
+    console.log('Database connection closed.');
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
