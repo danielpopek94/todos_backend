@@ -1,3 +1,5 @@
+![img](image.png)
+
 # Todo App Server
 
 This is a Express.js server for a Todo application. It provides an API to manage todos with basic CRUD operations.
