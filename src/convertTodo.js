@@ -4,7 +4,10 @@ const convertTodo = (todo) => {
     ...todo,
     id: _id.valueOf(),
   }
-return newTodo
+
+  delete newTodo._id;
+
+  return newTodo
 }
 
 module.exports = {
