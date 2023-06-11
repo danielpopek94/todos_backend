@@ -1,21 +1,15 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const { ObjectId } = require('mongodb');
-const { convertTodo } = require('./convertTodo.js');
+const { convertTodo } = require('../utils/convertTodo');
 
-const app = express();
-const port = 3000;
-
+const router = express.Router();
 const dbName = 'todo';
 const mongoUrl = 'mongodb+srv://admin:admin@todoapp.bbycyl2.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(mongoUrl);
 
-app.use(cors());
-app.use(bodyParser.json());
 
-app.get('/todos', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     if (!req.query.userId) {
       res.json('NO USER_ID');
@@ -44,7 +38,7 @@ app.get('/todos', async (req, res) => {
   }
 });
 
-app.post('/todos', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const userId = req.query.userId;
     const client = new MongoClient(mongoUrl);
@@ -72,7 +66,7 @@ app.post('/todos', async (req, res) => {
   }
 });
 
-app.patch('/todos/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
     const id =  req.params;
     const objectId = new ObjectId(id);
@@ -113,7 +107,7 @@ app.patch('/todos/:id', async (req, res) => {
   }
 });
 
-app.delete('/todos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const id =  req.params;
     const objectId = new ObjectId(id);
@@ -139,6 +133,4 @@ app.delete('/todos/:id', async (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+module.exports = router;
