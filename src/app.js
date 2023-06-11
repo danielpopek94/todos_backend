@@ -17,19 +17,23 @@ app.use(bodyParser.json());
 
 app.get('/todos', async (req, res) => {
   try {
-    const userId = Number(req.query.userId);
-    const client = new MongoClient(mongoUrl);
-
-    await client.connect();
-
-    const db = client.db(dbName);
-
-    const todos = await db.collection('todos').find({"userId": userId}).toArray();
-
-    if (todos.length) {
-      res.json(todos.map(todo => convertTodo(todo)));
+    if (!req.query.userId) {
+      res.json('NO USER_ID');
     } else {
-      res.json(userId);
+      const userId = Number(req.query.userId);
+      const client = new MongoClient(mongoUrl);
+
+      await client.connect();
+
+      const db = client.db(dbName);
+
+      const todos = await db.collection('todos').find({"userId": userId}).toArray();
+
+      if (todos.length) {
+        res.json(todos.map(todo => convertTodo(todo)));
+      } else {
+        res.json(userId);
+      }
     }
   } catch (e) {
     console.log('Error, cannot connect to the database:', e);
