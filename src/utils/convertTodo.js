@@ -1,13 +1,13 @@
-const convertTodo = (todo) => {
-  const _id = todo._id;
-  const newTodo = {
-    ...todo,
+const convertTodo = (element) => {
+  const _id = element._id;
+  const newElement = {
+    ...element,
     id: _id.valueOf(),
   }
 
-  delete newTodo._id;
+  delete newElement._id;
 
-  return newTodo
+  return newElement
 }
 
 module.exports = {

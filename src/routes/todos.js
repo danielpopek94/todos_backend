@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const { ObjectId } = require('mongodb');
+const authenticateToken = require('../utils/authenticateToken');
 const { convertTodo } = require('../utils/convertTodo');
 
 const router = express.Router();
@@ -9,7 +10,7 @@ const mongoUrl = 'mongodb+srv://admin:admin@todoapp.bbycyl2.mongodb.net/?retryWr
 const client = new MongoClient(mongoUrl);
 
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     if (!req.query.userId) {
       res.json('NO USER_ID');
@@ -38,7 +39,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const userId = req.query.userId;
     const client = new MongoClient(mongoUrl);
@@ -66,7 +67,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', authenticateToken, async (req, res) => {
   try {
     const id =  req.params;
     const objectId = new ObjectId(id);
@@ -107,7 +108,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const id =  req.params;
     const objectId = new ObjectId(id);
