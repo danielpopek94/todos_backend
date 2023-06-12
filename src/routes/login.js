@@ -2,13 +2,16 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { MongoClient } = require('mongodb');
-const { ObjectId } = require('mongodb');
-const { convertTodo } = require('../utils/convertTodo');
+
+const router = express.Router();
+
+require('dotenv').config();
 const userId = process.env.USER_ID;
 const password = process.env.USER_PASSWORD;
-const router = express.Router();
-const dbName = 'todo';
-const mongoUrl = `mongodb+srv://${userId}:${password}@todoapp.bbycyl2.mongodb.net/?retryWrites=true&w=majority`;
+const jwt_secret = process.env.JWT_SECRET;
+
+const dbName = 'TodoApp';
+const mongoUrl = `mongodb+srv://${userId}:${password}@todos.aui5rsa.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(mongoUrl);
 
 router.post('/', async (req, res) => {
@@ -32,7 +35,7 @@ router.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, 'secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1h' });
 
     res.json({ token });
   } catch (e) {

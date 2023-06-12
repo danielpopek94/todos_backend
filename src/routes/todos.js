@@ -5,8 +5,13 @@ const authenticateToken = require('../utils/authenticateToken');
 const { convertTodo } = require('../utils/convertTodo');
 
 const router = express.Router();
-const dbName = 'todo';
-const mongoUrl = 'mongodb+srv://admin:admin@todoapp.bbycyl2.mongodb.net/?retryWrites=true&w=majority';
+
+require('dotenv').config();
+const userId = process.env.USER_ID;
+const password = process.env.USER_PASSWORD;
+
+const dbName = 'TodoApp';
+const mongoUrl = `mongodb+srv://${userId}:${password}@todos.aui5rsa.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(mongoUrl);
 
 
@@ -41,6 +46,7 @@ router.get('/', authenticateToken, async (req, res) => {
 
 router.post('/', authenticateToken, async (req, res) => {
   try {
+    console.log(req.body);
     const userId = req.query.userId;
     const client = new MongoClient(mongoUrl);
     const {title, completed} = req.body;

@@ -12,10 +12,10 @@ const todosRoutes = require('./routes/todos');
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/todos', authenticateToken, todosRoutes);
+app.use('/todos',authenticateToken , todosRoutes);
 
 app.use('/login', loginRoute);
-app.use('/todos', todosRoutes);
+app.use('/todos',authenticateToken, todosRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
