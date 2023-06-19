@@ -8,10 +8,10 @@ const router = express.Router();
 
 require('dotenv').config();
 const userId = process.env.USER_ID;
-const password = process.env.USER_PASSWORD;
+const passwordDB = process.env.USER_PASSWORD;
 
 const dbName = 'TodoApp';
-const mongoUrl = `mongodb+srv://${userId}:${password}@todos.aui5rsa.mongodb.net/?retryWrites=true&w=majority`;
+const mongoUrl = `mongodb+srv://${userId}:${passwordDB}@todos.aui5rsa.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(mongoUrl);
 
 
