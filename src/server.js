@@ -7,6 +7,7 @@ const app = express();
 const port = 3000;
 
 const loginRoute = require('./routes/login');
+const registerRoute = require('./routes/register');
 const todosRoutes = require('./routes/todos');
 
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use('/todos',authenticateToken , todosRoutes);
 
 app.use('/login', loginRoute);
+app.use('/register', registerRoute);
 app.use('/todos',authenticateToken, todosRoutes);
 
 app.listen(port, () => {

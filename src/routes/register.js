@@ -23,24 +23,25 @@ router.post('/', async (req, res) => {
 
     const db = client.db(dbName);
 
-    const user = await db.collection('users').findOne({ email: email });
+    const checkUser = await db.collection('users').findOne({ email: email });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid email' });
+    if (checkUser) {
+      return res.status(409).json({ error: 'User with this email already exists!' });
     }
 
-    const isPasswordValid = user && await bcrypt.compare(password, user.password);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
+		const newUser = await db.collection('users').insertOne({
+      email,
+      password: hashedPassword,
+      "createdAt": new Date(),
+    });
 
-    const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1h' });
+		const token = jwt.sign({ userId: newUser.insertedId }, jwt_secret, { expiresIn: '1h' });
 
     const result = await db.collection('users').updateOne(
       { "email": email },
-      { $set: {token}
-      }
+      { $set: {token}}
     );
 
     res.json({ token });

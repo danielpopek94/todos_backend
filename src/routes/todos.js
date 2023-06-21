@@ -17,26 +17,27 @@ const client = new MongoClient(mongoUrl);
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    if (!req.query.userId) {
-      res.json('NO USER_ID');
-    } else {
-      const userId = Number(req.query.userId);
-      const client = new MongoClient(mongoUrl);
+    const userToken = req.headers.authorization.split(' ')[1];
+    const client = new MongoClient(mongoUrl);
 
-      await client.connect();
+    await client.connect();
 
-      const db = client.db(dbName);
+    const db = client.db(dbName);
+    const user = await db.collection('users').findOne({"token": userToken});
 
-      const todos = await db.collection('todos').find({"userId": userId}).toArray();
-
-      if (todos.length) {
-        res.json(todos.map(todo => convertTodo(todo)));
-      } else {
-        res.json(userId);
-      }
+    if (!user) {
+      res.status(404).json({ error: 'Inactive token' });
     }
-  } catch (e) {
-    console.log('Error, cannot connect to the database:', e);
+
+    const todos = await db.collection('todos').find({"userId": user._id}).toArray();
+
+    if (todos.length) {
+      res.json(todos.map(todo => convertTodo(todo)));
+    } else {
+      res.json([]);
+    }
+  } catch (err) {
+    console.log('Error, cannot connect to the database:', err);
     res.status(500).json({ error: 'Internal server error' });
   } finally {
     await client.close();
@@ -46,16 +47,22 @@ router.get('/', authenticateToken, async (req, res) => {
 
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    console.log(req.body);
-    const userId = req.query.userId;
+    const userToken = req.headers.authorization.split(' ')[1];
     const client = new MongoClient(mongoUrl);
+  
     const {title, completed} = req.body;
 
     await client.connect();
 
     const db = client.db(dbName);
+    const user = await db.collection('users').findOne({"token": userToken});
+
+    if (!user) {
+      res.status(404).json({ error: 'Inactive token' });
+    }
+
     const result = await db.collection('todos').insertOne({
-      "userId": Number(userId),
+      "userId": user._id,
       "title": title,
       "completed": completed,
       "createdAt": new Date(),
@@ -75,6 +82,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
 router.patch('/:id', authenticateToken, async (req, res) => {
   try {
+    const userToken = req.headers.authorization.split(' ')[1];
     const id =  req.params;
     const objectId = new ObjectId(id);
     const client = new MongoClient(mongoUrl);
@@ -82,6 +90,12 @@ router.patch('/:id', authenticateToken, async (req, res) => {
     await client.connect();
 
     const db = client.db(dbName);
+    const user = await db.collection('users').findOne({"token": userToken});
+
+    if (!user) {
+      res.status(404).json({ error: 'Inactive token' });
+    }
+
     const updateFields = {};
     
     for (const key in req.body) {
@@ -116,6 +130,7 @@ router.patch('/:id', authenticateToken, async (req, res) => {
 
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
+    const userToken = req.headers.authorization.split(' ')[1];
     const id =  req.params;
     const objectId = new ObjectId(id);
     const client = new MongoClient(mongoUrl);
@@ -123,6 +138,12 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     await client.connect();
 
     const db = client.db(dbName);
+    const user = await db.collection('users').findOne({"token": userToken});
+
+    if (!user) {
+      res.status(404).json({ error: 'Inactive token' });
+    }
+
     const result = await db.collection('todos').deleteOne({ "_id": objectId });
 
     if (result.deletedCount === 1) {

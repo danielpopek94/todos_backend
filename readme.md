@@ -2,10 +2,11 @@
 
 # Todo App Server
 
-This is a Express.js server for a Todo application. It provides an API to manage todos with basic CRUD operations.
+This is a Express.js server for a [Todo application](https://github.com/danielpopek94/task_manager). It provides an API to manage todos with basic CRUD operations.
 
 ## Features
 
+- Authentication by JSON Web Token.
 - Fetch todos based on the `userId` query parameter.
 - Create a new todo with the `POST /todos` endpoint.
 - Update a todo with the `PATCH /todos/:id` endpoint.
@@ -17,6 +18,7 @@ This is a Express.js server for a Todo application. It provides an API to manage
 - Node.js
 - Express.js
 - MongoDB (Atlas)
+- JWT
 - Nodemon
 - Cors
 - Body Parser
@@ -33,11 +35,23 @@ The server will be running on `http://localhost:3000`.
 
 ## API Endpoints
 
+### POST /login
+
+Searches for a user in the database based on the input data in the body. If successful, it generates and returns a JWT.
+
+Example: `POST /login`.
+
+### Post /register
+
+Searches for a user in the database based on the input data in the body. If there is no user in the database, it creates a new user and returns JWT (automatic login).
+
+Example: `POST /register`.
+
 ### GET /todos
 
-Fetches todos based on the `userId` query parameter.
+Fetches todos based on the JWT in localStorage.
 
-Example: `GET /todos?userId=123`
+Example: `GET /todos`
 
 ### POST /todos
 
