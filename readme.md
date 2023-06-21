@@ -7,6 +7,7 @@ This is a Express.js server for a [Todo application](https://github.com/danielpo
 ## Features
 
 - Authentication by JSON Web Token.
+- Hashing passwords of new users with bcrypt.
 - Fetch todos based on the `userId` query parameter.
 - Create a new todo with the `POST /todos` endpoint.
 - Update a todo with the `PATCH /todos/:id` endpoint.
