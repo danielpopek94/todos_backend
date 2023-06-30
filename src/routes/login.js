@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, jwt_secret, {
-      expiresIn: "24h",
+      expiresIn: "168h",
     });
 
     const result = await db.collection('users').updateOne(
