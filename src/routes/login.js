@@ -35,7 +35,9 @@ router.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, jwt_secret, {
+      expiresIn: "24h",
+    });
 
     const result = await db.collection('users').updateOne(
       { "email": email },
