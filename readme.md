@@ -27,7 +27,7 @@ This is a Express.js server for a [Todo application](https://github.com/danielpo
 ## Getting Started
 
 1. Let's fork repository.
-2. Clone the repository: `git clone https://github.com/your-username/todos_backend.git`
+2. Clone the repository: `git clone https://github.com/danielpopek94/todos_backend.git`
 3. Navigate to the project directory: `cd todo-app-server`
 4. Install the dependencies: `npm install`
 5. Start the server: `npm start`
